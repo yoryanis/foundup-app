@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-3 col-lg-3 text-center">
+      <img
+        src="{{ user?.photo.url }}"
+        class="rounded-circle"
+        width="60"
+        height="60"
+        (click)="goToProfile()"
+        alt="Profile image"
+        *ngIf="user?.photo; else icon"
+      />
+      <ng-template #icon>
+        <img
+          src="../../../assets/icons/empty-user.svg"
+          class="rounded-circle"
+          width="60"
+          height="60"
+          (click)="goToProfile()"
+          alt="Profile image"
+        />
+      </ng-template>
+    </div>
+    <div class="col-md-9 col-lg-9 text-center user-info">
+      <p class="text-muted" style="text-align: justify">
+        <span class="fw-bold" (click)="goToProfile()"
+          >{{ user?.name | titlecase }} {{ user?.lastname | titlecase }}</span
+        ><br />{{
+          user?.occupation ? user?.occupation : ("Sin ocupación" | titlecase)
+        }}<br /><a routerLink="/profile/{{ user?.identification }}/reports"
+          >Ver perfil
+        </a>
+      </p>
+    </div>
+  </div>
+</div>

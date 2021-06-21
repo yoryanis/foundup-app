@@ -1,0 +1,132 @@
+<block-ui>
+  <app-navbar></app-navbar>
+  <div class="container">
+    <div class="row mb-2">
+      <div class="d-flex justify-content-center">
+        <div class="col-12 col-sm-12 col-md-10 col-lg-8">
+          <mat-card>
+            <div mat-card-image class="cover-image">
+              <img [src]="getImage()" alt="Cover Images" />
+            </div>
+            <div class="content" mat-card-image>
+              <div class="cover-image-profile">
+                <img
+                  src="{{ user?.photo.url }}"
+                  class="rounded-circle"
+                  width="130"
+                  height="130"
+                  alt="Profile image"
+                  *ngIf="user?.photo; else icon"
+                />
+                <ng-template #icon
+                  ><img
+                    src="../../../assets/icons/empty-user.svg"
+                    class="rounded-circle"
+                    width="130"
+                    height="130"
+                    alt="Profile image"
+                /></ng-template>
+              </div>
+              <mat-card-content class="info-user">
+                <div class="row">
+                  <div class="text-center">
+                    <h2>
+                      <span class="fw-bolder"
+                        >{{ user?.name | titlecase }}
+                        {{ user?.lastname | titlecase }}</span
+                      ><br /><small class="text-muted">{{
+                        user?.occupation
+                          ? (user?.occupation | titlecase)
+                          : ("Sin ocupación" | titlecase)
+                      }}</small
+                      ><br />
+                      <a
+                        routerLink="/edit-user"
+                        *ngIf="editBtn"
+                        mat-raised-button
+                        color="primary"
+                        style="text-decoration: none"
+                        >Editar perfil</a
+                      >
+                    </h2>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div
+                    class="col-md-2 col-lg-2 d-none d-md-block d-lg-block"
+                  ></div>
+                  <div class="col-xs-auto col-sm-auto col-md-10 col-lg-10">
+                    <p>
+                      <mat-icon class="text-muted">date_range</mat-icon>
+                      <span class="aligned-with-icon"
+                        >Miembro desde
+                        {{ user?.createdAt | date: "MMM d, y" }}</span
+                      >
+                    </p>
+                    <p>
+                      <mat-icon class="text-muted">home</mat-icon>
+                      <span class="aligned-with-icon">{{
+                        user?.city | titlecase
+                      }}</span>
+                    </p>
+                    <p>
+                      <mat-icon class="text-muted">date_range</mat-icon>
+                      <span class="aligned-with-icon">{{
+                        user?.birthdate | date: "MMM d, y"
+                      }}</span>
+                    </p>
+                    <p *ngIf="user?.address">
+                      <mat-icon class="text-muted">place</mat-icon>
+                      <span class="aligned-with-icon">{{
+                        user?.address | titlecase
+                      }}</span>
+                    </p>
+                    <p>
+                      <mat-icon class="text-muted">email</mat-icon>
+                      <span class="aligned-with-icon">{{ user?.email }}</span>
+                    </p>
+                    <p *ngIf="user?.phone">
+                      <mat-icon class="text-muted">phone</mat-icon>
+                      <span class="aligned-with-icon"
+                        >+57 {{ user?.phone }}</span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </mat-card-content>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <!-- List -->
+    <div class="row">
+      <div class="d-flex justify-content-center">
+        <div class="col-12 col-sm-12 col-md-10 col-lg-8">
+          <mat-card>
+            <div class="d-flex justify-content-center">
+              <nav mat-tab-nav-bar>
+                <a
+                  mat-tab-link
+                  *ngFor="let link of navLinks"
+                  [routerLink]="link.link"
+                  routerLinkActive
+                  #rla="routerLinkActive"
+                  [active]="rla.isActive"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                >
+                  {{ link.label }}
+                </a>
+              </nav>
+            </div>
+          </mat-card>
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-navbar-main></app-navbar-main>
+</block-ui>

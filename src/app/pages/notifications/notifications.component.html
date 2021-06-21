@@ -1,0 +1,82 @@
+<block-ui>
+  <app-navbar [count]="count"></app-navbar>
+  <div class="container">
+    <div class="row">
+      <div class="d-flex justify-content-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8">
+          <mat-card>
+            <mat-card-content>
+              <h2 class="text-muted text-center">Centro de notificaciones</h2>
+              <div
+                class="row"
+                *ngFor="let notification of notifications"
+                [ngStyle]="{
+                  'background-color':
+                    notification.seen === false ? 'rgb(225, 245, 250)' : '#fff'
+                }"
+              >
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-4">
+                  <mat-divider
+                    style="width: 98%; margin-left: 1%"
+                  ></mat-divider>
+                </div>
+                <div class="col-1 text-center">
+                  <mat-icon mat-list-icon class="found d-none d-sm-block"
+                    >campaign</mat-icon
+                  >
+                </div>
+                <div class="col-9">
+                  Enhorabuena! Parece ser que
+                  <a
+                    routerLink="/profile/{{
+                      notification?.user.identification
+                    }}/reports"
+                    >@{{ notification?.user.name | titlecase }}</a
+                  >
+                  ha encontrado tu
+                  <a
+                    class="fw-bold"
+                    routerLink="/preview/{{
+                      notification?.accessory.id_unique
+                    }}"
+                    >elemento perdido: {{ notification?.accessory.name }}.</a
+                  >
+                  <p class="text-muted" style="font-size: 12px">
+                    {{
+                      notification.createdAt
+                        | date: "EEEE, MMMM d, y, h:mm:ss a"
+                        | titlecase
+                    }}
+                  </p>
+                </div>
+                <div class="col-2">
+                  <mat-icon
+                    (click)="accept(notification?.accessory.id_unique)"
+                    style="cursor: pointer; color: rgb(51, 207, 51)"
+                    class="me-1"
+                    matTooltip="Aceptar comentario"
+                    matTooltipPosition="above"
+                    *ngIf="notification?.accessory.state === 'lost'"
+                    >recommend</mat-icon
+                  >
+                  <mat-icon
+                    (click)="seen(notification?.id)"
+                    style="cursor: pointer; color: rgb(68, 112, 233)"
+                    matTooltip="Marcar como vista"
+                    matTooltipPosition="above"
+                    *ngIf="!notification.seen"
+                    >visibility</mat-icon
+                  >
+                </div>
+              </div>
+
+              <app-empty *ngIf="notifications.length === 0"></app-empty>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-navbar-main></app-navbar-main>
+</block-ui>

@@ -1,0 +1,87 @@
+<div class="container">
+  <div class="row mb-2">
+    <div class="d-flex justify-content-center">
+      <div class="col-12 col-sm-12 col-md-9 col-lg-7">
+        <mat-card>
+          <mat-card-content>
+            <h2 class="text-muted text-center mt-3 mb-3">
+                <img src="../../../assets/icons/logo.png" height="50" alt="Logo foundUp">
+            </h2>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+              <div class="row" style="padding-top: 55px">
+                <div class="d-flex justify-content-center">
+                  <div class="col-12 col-sm-12 col-md-10 col-lg-10">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Correo electrónico</mat-label>
+                      <input
+                        matInput
+                        placeholder="Correo electrónico"
+                        formControlName="email"
+                      />
+                      <mat-error *ngIf="f.email.hasError('required')">
+                        El correo es obligatorio
+                      </mat-error>
+                      <mat-error *ngIf="f.email.hasError('email')">
+                        El formato de correo es inválido
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-4">
+                <div class="d-flex justify-content-center">
+                  <div class="col-12 col-sm-12 col-md-10 col-lg-10">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Contraseña</mat-label>
+                      <input
+                        matInput
+                        placeholder="Contraseña"
+                        [type]="hidePwd ? 'password' : 'text'"
+                        formControlName="password"
+                        minlength="4"
+                      />
+                      <mat-icon
+                        matSuffix
+                        (click)="hidePwd = !hidePwd"
+                        class="clickable"
+                        >{{
+                          hidePwd ? "visibility_off" : "visibility"
+                        }}</mat-icon
+                      >
+                      <mat-error *ngIf="f.password.hasError('required')">
+                        La contraseña es obligatoria
+                      </mat-error>
+                      <mat-error *ngIf="f.password.hasError('minlength')">
+                        La contraseña es muy corta
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3 mb-4">
+                <div class="col-12 colsm-12 col-md-12 col-lg-12 text-center">
+                  <button mat-raised-button color="primary" [disabled]="loading">
+                    {{ loading ? "Iniciando..." : "Iniciar sesión" }}
+                  </button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                  <p class="mb-3">No tengo cuenta aún, <a routerLink="/create-account"
+                    >crear cuenta!</a
+                  ></p>
+                  
+                </div>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col-md-12">
+      <app-footer></app-footer>
+    </div>
+  </div>
+</div>

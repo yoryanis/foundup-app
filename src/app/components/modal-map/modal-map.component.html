@@ -1,0 +1,28 @@
+<h2 class="text-muted fw-bold">
+  {{ dataReport ? "Ubicación de reporte" : "Agregar ubicación" }}
+</h2>
+<mat-divider></mat-divider>
+<div mat-dialog-content class="max-h-80vh">
+  <div id="geocoder" class="geocoder"></div>
+  <div id="map"></div>
+</div>
+
+<mat-divider></mat-divider>
+
+<div class="row mt-3 text-center" *ngIf="!dataReport">
+  <div class="col-md-6">
+    <button mat-stroked-button (click)="onClose()">
+      Cerrar <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="col-md-6">
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="submit"
+      (click)="onSubmit()"
+    >
+      Guardar <mat-icon>save</mat-icon>
+    </button>
+  </div>
+</div>

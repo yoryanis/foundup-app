@@ -1,0 +1,179 @@
+<block-ui>
+  <app-navbar [count]="count"></app-navbar>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-auto col-sm-auto col-md-7 col-lg-7">
+        <div class="text-center">
+          <app-search (search)="search($event)"></app-search>
+        </div>
+        <!-- Card -->
+        <mat-card class="mb-3" *ngFor="let report of reports">
+          <mat-card-header>
+            <div mat-card-avatar>
+              <img
+                src="{{ report?.comments[0].userOwner.photo.url }}"
+                class="rounded-circle"
+                width="50"
+                height="50"
+                (click)="
+                  goToProfile(report?.comments[0].userOwner.identification)
+                "
+                style="cursor: pointer"
+                alt="Image profile"
+                *ngIf="report?.comments[0].userOwner.photo !== null; else icon"
+              />
+              <ng-template #icon>
+                <img
+                  src="../../../assets/icons/empty-user.svg"
+                  class="rounded-circle"
+                  width="50"
+                  height="50"
+                  (click)="
+                    goToProfile(report?.comments[0].userOwner.identification)
+                  "
+                  style="cursor: pointer"
+                  alt="Image profile"
+                />
+              </ng-template>
+            </div>
+            <mat-card-title
+              (click)="
+                goToProfile(report?.comments[0].userOwner.identification)
+              "
+              class="mt-2"
+              style="cursor: pointer"
+              >@{{
+                report?.comments[0].userOwner.name | titlecase
+              }}</mat-card-title
+            >
+            <mat-card-subtitle>{{
+              report?.updatedAt | date: "MMM d, y"
+            }}</mat-card-subtitle>
+
+            <div style="position: absolute; right: 25px">
+              <mat-icon
+                matTooltip="Ver ubicación de pérdida"
+                style="cursor: pointer; color: rgb(64, 64, 252)"
+                (click)="onLocation(report)"
+                >map</mat-icon
+              >
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <h3 class="fw-bolder">
+              <a
+                routerLink="/preview/{{ report?.id_unique }}"
+                matTooltip="Previsualizar detalles {{
+                  report?.name | titlecase
+                }}"
+                matTooltipPosition="above"
+                style="text-decoration: none; color: #000"
+                >{{ report?.name | titlecase }}</a
+              >
+            </h3>
+            <p>
+              {{ report?.description | titlecase }}
+            </p>
+            <div class="row">
+              <div class="col-auto col-sm-7 col-md-7 col-lg-7">
+                <p>
+                  <mat-icon
+                    class="text-muted"
+                    matTooltip="Lugar de pérdida"
+                    matTooltipPosition="above"
+                    >place</mat-icon
+                  >
+                  <span class="aligned-with-icon"
+                    >Reportado en {{ report?.lost_place }}</span
+                  >
+                </p>
+                <p>
+                  <mat-icon
+                    class="text-muted"
+                    matTooltip="Recompensa"
+                    matTooltipPosition="above"
+                    >attach_money</mat-icon
+                  >
+                  <span class="aligned-with-icon">{{
+                    !report?.reward
+                      ? "Sin recompensa"
+                      : (report?.reward | formatCurrency)
+                  }}</span>
+                </p>
+              </div>
+              <div class="col-auto col-sm-5 col-md-5 col-lg-5">
+                <p>
+                  <mat-icon
+                    class="text-muted"
+                    matTooltip="Fecha de pérdida"
+                    matTooltipPosition="above"
+                    >date_range</mat-icon
+                  >
+                  <span class="aligned-with-icon"
+                    >Reportado desde
+                    {{ report?.lost_date | date: "MMM d, y" }}</span
+                  >
+                </p>
+                <p>
+                  <mat-icon
+                    class="text-muted"
+                    matTooltip="Categoría"
+                    matTooltipPosition="above"
+                    >bookmark</mat-icon
+                  >
+                  <span class="aligned-with-icon">{{
+                    report?.category.category
+                  }}</span>
+                </p>
+              </div>
+            </div>
+            <mat-divider style="width: 96%; margin-left: 2%"></mat-divider>
+            <h3 class="fw-bold mt-2">Evidencias</h3>
+            <div class="row text-center mt-2 mb-3">
+              <div
+                class="col-xs-12 col-sm-12 col-md-4 col-lg-4"
+                *ngFor="let photo of report?.images"
+              >
+                <img
+                  src="{{ photo.photo.url }}"
+                  class="rounded img-fluid mt-1"
+                  alt="Evidences"
+                />
+              </div>
+
+              <p *ngIf="report?.images.length === 0">
+                No hay evidencias fotográficas
+              </p>
+            </div>
+          </mat-card-content>
+          <mat-card-actions class="text-center">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="sendAlert(report)"
+              class="mb-3"
+            >
+              Lo encontré!
+            </button>
+          </mat-card-actions>
+        </mat-card>
+
+        <app-empty *ngIf="reports.length === 0 || searchFailed"></app-empty>
+
+        <app-up-to-date
+          *ngIf="reports.length > 0 || !searchFailed"
+        ></app-up-to-date>
+        <!-- End card -->
+      </div>
+      <div class="col-md-1 d-none d-md-block d-lg-block"></div>
+      <div class="col-md-4 d-none d-md-block d-lg-block">
+        <div style="position: fixed" class="mt-5">
+          <app-user-info></app-user-info>
+          <app-footer></app-footer>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-navbar-main></app-navbar-main>
+</block-ui>

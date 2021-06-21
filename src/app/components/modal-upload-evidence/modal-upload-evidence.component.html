@@ -1,0 +1,81 @@
+<h2 class="text-muted fw-bold">Agregar evidencia</h2>
+<mat-divider></mat-divider>
+<form
+  [formGroup]="uploadForm"
+  (ngSubmit)="onSubmit()"
+  novalidate
+  enctype="multipart/form-data"
+  autocomplete="off"
+>
+  <div class="row text-center mt-2 mb-2">
+    <div class="col-12">
+      <input
+        hidden
+        (change)="previewImage($event)"
+        type="file"
+        #file
+        id="file"
+        accept="image/*"
+      />
+      <img
+        [src]="preview"
+        alt="Preview Image"
+        height="280"
+        width="100%"
+        *ngIf="preview"
+      />
+    </div>
+    <div class="col-12">
+      <button
+        type="button"
+        mat-flat-button
+        class="bg-wo-gradient full-width b-h"
+        (click)="file.click()"
+        *ngIf="!preview"
+      >
+        <mat-icon color="white">insert_drive_file</mat-icon>
+        <mat-divider vertical class="v-divider"></mat-divider> Adjuntar
+        evidencia *
+      </button>
+      <button
+        mat-raised-button
+        class="mt-2 mb-2"
+        color="warn"
+        type="button"
+        (click)="clearImage()"
+        *ngIf="preview"
+      >
+        Eliminar previa
+      </button>
+    </div>
+    <div class="col-12">
+      <mat-error *ngIf="files.length === 0">No hay evidencia cargada!</mat-error
+      ><br />
+      <mat-error *ngIf="noAllowed"
+        ><b>Nota:</b> El formato no es permitido (Formatos válidos .png, jpg,
+        jpeg, gif) o el peso excede lo permitido (Peso permitido 1.5MB)
+      </mat-error>
+    </div>
+  </div>
+</form>
+
+<mat-divider></mat-divider>
+
+<div class="row mt-3 text-center">
+  <div class="col-md-6">
+    <button mat-stroked-button (click)="onClose()">
+      Cerrar <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="col-md-6">
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="loadingPhoto"
+      (click)="onSubmit()"
+    >
+      {{ loadingPhoto ? "Subiendo foto..." : "Subir evidencia" }}
+      <mat-icon>upload</mat-icon>
+    </button>
+  </div>
+</div>

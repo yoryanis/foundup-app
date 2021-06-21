@@ -1,0 +1,36 @@
+<div class="toolbar" role="banner">
+  <img
+    style="cursor: pointer"
+    src="../../../assets/icons/logo-white.png"
+    alt="Found Up"
+    (click)="goToHome()"
+    height="30"
+  />
+  <div class="spacer"></div>
+  <a
+    aria-label="Notificaciones"
+    matTooltip="Notificaciones"
+    matTooltipPosition="above"
+    class="label-menu notification"
+    routerLink="/notifications"
+  >
+    <mat-icon matBadge="{{ count }}" matBadgeColor="warn"
+      >notifications</mat-icon
+    >
+  </a>
+  <a
+    aria-label="Cerrar sesión"
+    [matMenuTriggerFor]="beforeMenu"
+    matTooltip="Cerrar sesión"
+    matTooltipPosition="above"
+    class="label-menu"
+    style="cursor: pointer"
+  >
+    <mat-icon>more_vert</mat-icon>
+  </a>
+  <mat-menu #beforeMenu="matMenu" xPosition="before">
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>power_settings_new</mat-icon> Cerrar sesión
+    </button>
+  </mat-menu>
+</div>

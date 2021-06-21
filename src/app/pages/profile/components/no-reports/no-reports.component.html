@@ -1,0 +1,93 @@
+<block-ui>
+  <div *ngFor="let report of reports">
+    <mat-card
+      class="mt-2"
+      style="padding: 35px 50px"
+      *ngIf="reports.length > 0"
+    >
+      <mat-card-header>
+        <div mat-card-avatar>
+          <img
+            src="{{ report?.comments[0].userOwner.photo.url }}"
+            class="rounded-circle"
+            width="50"
+            height="50"
+            (click)="goToProfile()"
+            style="cursor: pointer"
+            alt="Image profile"
+            *ngIf="report?.comments[0].userOwner.photo; else icon"
+          />
+          <ng-template #icon>
+            <img
+              src="../../../assets/icons/empty-user.svg"
+              class="rounded-circle"
+              width="50"
+              height="50"
+              (click)="goToProfile()"
+              style="cursor: pointer"
+              alt="Image profile"
+            />
+          </ng-template>
+        </div>
+        <mat-card-title
+          >@{{ report?.comments[0].userOwner.name | titlecase }}</mat-card-title
+        >
+        <mat-card-subtitle>{{
+          report?.updatedAt | date: "MMM d, y"
+        }}</mat-card-subtitle>
+        <div style="position: absolute; right: 25px">
+          <a
+            [matMenuTriggerFor]="beforeMenu"
+            class="label-menu"
+            style="cursor: pointer; color: black"
+          >
+            <mat-icon matTooltip="Opciones" matTooltipPosition="above"
+              >more_vert</mat-icon
+            >
+          </a>
+          <mat-menu #beforeMenu="matMenu" xPosition="before">
+            <button
+              mat-menu-item
+              (click)="openDialogDelete(report?.id_unique)"
+            >
+              <mat-icon>delete</mat-icon> Eliminar
+            </button>
+          </mat-menu>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <h3 class="fw-bolder">{{ report?.name | titlecase }}</h3>
+
+        <p>
+          <mat-icon
+            class="text-muted"
+            matTooltip="Categoría"
+            matTooltipPosition="above"
+            >bookmark</mat-icon
+          >
+          <span class="aligned-with-icon">{{
+            report?.category.category
+          }}</span>
+        </p>
+
+        <div class="report-btn">
+          <button
+            mat-mini-fab
+            color="warn"
+            matTooltip="Reportar"
+            matTooltipPosition="above"
+            (click)="edit(report?.id_unique)"
+            aria-label="Reportar"
+            style="margin-top: -19px"
+          >
+            <mat-icon>play_circle_filled</mat-icon>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <app-empty *ngIf="reports.length === 0"></app-empty>
+
+  <app-up-to-date *ngIf="reports.length > 0"></app-up-to-date>
+</block-ui>

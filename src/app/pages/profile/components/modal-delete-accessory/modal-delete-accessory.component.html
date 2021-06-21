@@ -1,0 +1,24 @@
+<h3 class="text-muted text-center">
+  ¿Está seguro que desea eliminar el reporte del elemento
+  <span class="fw-bold">{{ info?.name }}</span
+  ><br /><small
+    >Al aceptar la eliminación, no podrá reversar la operación.</small
+  >?
+</h3>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-lg-6">
+      <button mat-raised-button (click)="onClose(false)">Cancelar</button>
+    </div>
+    <div class="col-lg-6">
+      <button
+        mat-raised-button
+        color="warn"
+        [disabled]="loading"
+        (click)="onDelete()"
+      >
+        Sí, eliminar
+      </button>
+    </div>
+  </div>
+</div>

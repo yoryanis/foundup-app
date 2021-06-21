@@ -1,0 +1,405 @@
+<block-ui>
+  <app-navbar></app-navbar>
+
+  <div class="container">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-9 col-lg-9">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title class="text-muted">Cambiar foto</mat-card-title>
+          </mat-card-header>
+          <div class="mt-3"></div>
+          <mat-divider style="width: 96%; margin-left: 2%"></mat-divider>
+          <div class="mt-5"></div>
+          <mat-card-content>
+            <form
+              [formGroup]="photoForm"
+              (ngSubmit)="onSubmitPhoto()"
+              novalidate
+              enctype="multipart/form-data"
+            >
+              <div class="row text-center" *ngIf="preview">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-4">
+                  <span class="text-muted"> Imagen previa </span><br />
+                  <br />
+                  <img [src]="preview" height="200" />
+                </div>
+              </div>
+              <div class="row text-center">
+                <div class="col-md-12 col-lg-12">
+                  <div>
+                    <button
+                      type="button"
+                      mat-flat-button
+                      class="bg-wo-gradient"
+                      (click)="file.click()"
+                    >
+                      <mat-icon>insert_drive_file</mat-icon>
+                      <mat-divider vertical class="v-divider"></mat-divider>
+                      Adjuntar archivo *
+                    </button>
+                    <input
+                      hidden
+                      type="file"
+                      (change)="previewImage($event)"
+                      #file
+                      id="file"
+                      accept="image/*"
+                      formControlName="file"
+                    />
+                    <mat-error *ngIf="files.length === 0"
+                      >No hay foto cargada!</mat-error
+                    ><br />
+                    <mat-error *ngIf="noAllowed"
+                      ><b>Nota:</b> El formato no es permitido (Formatos válidos
+                      .png, jpg, jpeg, gif) o el peso excede lo permitido (Peso
+                      permitido 1.5MB)
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+              <div class="pb-4"></div>
+              <mat-divider style="width: 96%; margin-left: 2%"></mat-divider>
+              <div class="pb-2"></div>
+              <div class="row mt-3 mb-4">
+                <div class="col-md-1 col-lg-1"></div>
+                <div class="col-12 col-sm-12 col-md-10 col-lg-10">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    [disabled]="loadingPhoto"
+                  >
+                    {{ loadingPhoto ? "Subiendo foto..." : "Cambiar foto" }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-9 col-lg-9">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title class="text-muted"
+              >Editar información usuario</mat-card-title
+            >
+          </mat-card-header>
+          <div class="mt-3"></div>
+          <mat-divider style="width: 96%; margin-left: 2%"></mat-divider>
+          <div class="mt-5"></div>
+          <mat-card-content>
+            <form [formGroup]="editForm" (ngSubmit)="onSubmit()" novalidate>
+              <div class="row">
+                <div class="col-md-1 col-lg-1"></div>
+                <div class="col-12 col-sm-12 col-md-5 col-lg-5 me-1">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Nombres</mat-label>
+                    <input
+                      matInput
+                      placeholder="Nombres"
+                      formControlName="name"
+                    />
+                    <mat-error *ngIf="f.name.hasError('required')">
+                      Los nombres son obligatorios
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-5 col-lg-5">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Apellidos</mat-label>
+                    <input
+                      matInput
+                      placeholder="Apellidos"
+                      formControlName="lastname"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-1 col-lg-1"></div>
+                <div class="col-12 col-sm-12 col-md-5 col-lg-5 me-1">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Ciudad</mat-label>
+                    <mat-select
+                      appearance="fill"
+                      class="full-width"
+                      formControlName="city"
+                    >
+                      <mat-option value="">Selecione ciudad</mat-option>
+                      <ng-container *ngFor="let city of cities | enum">
+                        <mat-option [value]="city.value">
+                          {{ city.value | titlecase }}
+                        </mat-option>
+                      </ng-container>
+                    </mat-select>
+                    <mat-error *ngIf="f.city.hasError('required')">
+                      La ciudad es obligatoria
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-5 col-lg-5">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Dirección</mat-label>
+                    <input
+                      matInput
+                      placeholder="Dirección"
+                      formControlName="address"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-1 col-lg-1"></div>
+                <div class="col-12 col-sm-12 col-md-5 col-lg-5 me-1">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Ocupación</mat-label>
+                    <mat-select
+                      appearance="fill"
+                      class="full-width"
+                      formControlName="occupation"
+                    >
+                      <mat-option value=""
+                        >Selecione ocupación o profesión</mat-option
+                      >
+                      <ng-container
+                        *ngFor="let occupation of occupations | enum"
+                      >
+                        <mat-option [value]="occupation.value">
+                          {{ occupation.value | titlecase }}
+                        </mat-option>
+                      </ng-container>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-5 col-lg-5">
+                  <mat-form-field appearance="fill" class="example-form-field">
+                    <mat-label>Fecha de nacimiento</mat-label>
+                    <input
+                      matInput
+                      formControlName="birthdate"
+                      [matDatepicker]="datepicker"
+                      placeholder="dd / mm / yyyy"
+                      [max]="maxDate"
+                      required
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="datepicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #datepicker>
+                      <mat-datepicker-actions>
+                        <button mat-button matDatepickerCancel>Cancelar</button>
+                        <button
+                          mat-raised-button
+                          color="primary"
+                          matDatepickerApply
+                        >
+                          Aplicar
+                        </button>
+                      </mat-datepicker-actions>
+                    </mat-datepicker>
+                    <mat-error *ngIf="f.city.hasError('required')">
+                      La fecha de nacimiento es obligatoria
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-1 col-lg-1"></div>
+                <div class="col-12 col-sm-12 col-md-5 col-lg-5 me-1">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Teléfono</mat-label>
+                    <input
+                      matInput
+                      placeholder="Teléfono"
+                      formControlName="phone"
+                    />
+                  </mat-form-field>
+                  <mat-hint
+                    ><span class="fw-bold text-danger">Importante:</span> Al
+                    agregar un número de teléfono o una dirección, estaría
+                    aceptando la publicación de los mismos dentro de la
+                    plataforma al momento de reportar.</mat-hint
+                  >
+                </div>
+                <div class="col-12 col-sm-12 col-md-5 col-lg-5">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Correo electrónico *</mat-label>
+                    <input
+                      matInput
+                      placeholder="Correo electrónico"
+                      formControlName="email"
+                    />
+                    <mat-error *ngIf="f.email.hasError('required')">
+                      El correo es obligatorio
+                    </mat-error>
+                    <mat-error *ngIf="f.email.hasError('email')">
+                      El formato de correo es inválido
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="d-flex justify-content-start">
+                  <div class="col-md-1 col-lg-1"></div>
+                </div>
+              </div>
+              <div class="row mt-3 mb-4">
+                <div class="col-md-1 col-lg-1"></div>
+                <div class="col-12 col-sm-12 col-md-10 col-lg-10">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    [disabled]="loading"
+                  >
+                    {{ loading ? "Actualizando..." : "Editar" }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-9 col-lg-9">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title class="text-muted"
+              >Cambiar contraseña</mat-card-title
+            >
+          </mat-card-header>
+          <div class="mt-3"></div>
+          <mat-divider style="width: 96%; margin-left: 2%"></mat-divider>
+          <div class="mt-5"></div>
+          <mat-card-content>
+            <form
+              [formGroup]="passwordForm"
+              (ngSubmit)="onSubmitPassword()"
+              novalidate
+            >
+              <div class="row">
+                <div class="col-md-1 col-lg-1"></div>
+                <div class="col-12 col-sm-12 col-md-5 col-lg-5 me-1">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Contraseña *</mat-label>
+                    <input
+                      matInput
+                      [type]="hidePwd ? 'password' : 'text'"
+                      formControlName="password"
+                      placeholder="**********"
+                      minlength="4"
+                    />
+                    <mat-icon
+                      matSuffix
+                      (click)="hidePwd = !hidePwd"
+                      class="clickable"
+                      >{{ hidePwd ? "visibility_off" : "visibility" }}</mat-icon
+                    >
+                    <mat-error *ngIf="g.password.hasError('required')">
+                      La contraseña es obligatoria
+                    </mat-error>
+                    <mat-error *ngIf="g.password.hasError('minlength')">
+                      La contraseña es muy corta
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-5 col-lg-5">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Contraseña *</mat-label>
+                    <input
+                      matInput
+                      [type]="hidePwd ? 'password' : 'text'"
+                      formControlName="repeat"
+                      placeholder="**********"
+                      minlength="4"
+                    />
+                    <mat-icon
+                      matSuffix
+                      (click)="hidePwd = !hidePwd"
+                      class="clickable"
+                      >{{ hidePwd ? "visibility_off" : "visibility" }}</mat-icon
+                    >
+                    <mat-error *ngIf="g.repeat.hasError('required')">
+                      La contraseña es obligatoria
+                    </mat-error>
+                    <mat-error *ngIf="g.repeat.errors?.mustMatch">
+                      Las contraseñas no coinciden
+                    </mat-error>
+                    <mat-error *ngIf="g.repeat.hasError('minlength')">
+                      La contraseña es muy corta
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="d-flex justify-content-start">
+                  <div class="col-md-1 col-lg-1"></div>
+                </div>
+              </div>
+              <div class="row mt-3 mb-4">
+                <div class="col-md-1 col-lg-1"></div>
+                <div class="col-12 col-sm-12 col-md-10 col-lg-10">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    [disabled]="loading2"
+                  >
+                    {{
+                      loading2
+                        ? "Actualizando credenciales..."
+                        : "Editar contraseña"
+                    }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-9 col-lg-9">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title class="text-danger">Zona Peligro</mat-card-title>
+          </mat-card-header>
+          <div class="mt-3"></div>
+          <mat-divider style="width: 96%; margin-left: 2%"></mat-divider>
+          <div class="mt-5"></div>
+          <mat-card-content>
+            <div class="row mt-3 mb-4">
+              <div class="col-12 col-sm-12 col-md-11 col-lg-11 ms-3">
+                <p>
+                  En esta zona puede eliminar o cancelar su cuenta de usuario.
+                  Debe pensarlo con cuidado antes de eliminar su cuenta, ya que
+                  no podrá acceder a ella con las credenciales actuales y
+                  eliminará permanentemente todos los registros asociados a ella
+                  una vez eliminada.
+                </p>
+                <button
+                  mat-raised-button
+                  color="warn"
+                  [disabled]="loading3"
+                  (click)="deleteAccount(user)"
+                >
+                  {{
+                    loading3 ? "Eliminando cuenta... :(" : "Eliminar cuenta :("
+                  }}
+                </button>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <app-navbar-main></app-navbar-main>
+</block-ui>

@@ -1,0 +1,169 @@
+<block-ui>
+  <div *ngFor="let report of reports">
+    <mat-card
+      class="mt-2"
+      style="padding: 35px 50px"
+      *ngIf="reports.length > 0"
+    >
+      <mat-card-header>
+        <div mat-card-avatar>
+          <img
+            src="{{ report?.comments[0].userOwner.photo.url }}"
+            class="rounded-circle"
+            width="50"
+            height="50"
+            style="cursor: pointer"
+            alt="Image profile"
+            *ngIf="report?.comments[0].userOwner.photo; else icon"
+          />
+          <ng-template #icon>
+            <img
+              src="../../../assets/icons/empty-user.svg"
+              class="rounded-circle"
+              width="50"
+              height="50"
+              style="cursor: pointer"
+              alt="Image profile"
+            />
+          </ng-template>
+        </div>
+        <mat-card-title
+          >@{{ report?.comments[0].userOwner.name | titlecase }}
+        </mat-card-title>
+        <mat-card-subtitle>{{
+          report?.updatedAt | date: "MMM d, y"
+        }}</mat-card-subtitle>
+        <div style="position: absolute; right: 25px" *ngIf="editBtn">
+          <a
+            [matMenuTriggerFor]="beforeMenu"
+            class="label-menu"
+            style="cursor: pointer; color: black"
+          >
+            <mat-icon matTooltip="Opciones" matTooltipPosition="above"
+              >more_vert</mat-icon
+            >
+          </a>
+          <mat-menu #beforeMenu="matMenu" xPosition="before">
+            <button mat-menu-item (click)="generateQR(report)">
+              <mat-icon>qr_code_2</mat-icon> Generar QR
+            </button>
+            <button mat-menu-item (click)="onLocation(report)">
+              <mat-icon>map</mat-icon> Ver ubicación
+            </button>
+            <button mat-menu-item (click)="edit(report?.id_unique)">
+              <mat-icon>edit</mat-icon> Editar
+            </button>
+            <button mat-menu-item (click)="openDialogDelete(report?.id_unique)">
+              <mat-icon>delete</mat-icon> Eliminar
+            </button>
+          </mat-menu>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <h3>
+          <a
+            routerLink="/preview/{{ report?.id_unique }}"
+            matTooltip="Previsualizar detalles {{ report?.name | titlecase }}"
+            matTooltipPosition="above"
+            class="fw-bolder"
+            style="text-decoration: none; color: #000; font-size: 16px"
+            >{{ report?.name | titlecase }}</a
+          >
+        </h3>
+        <p>
+          {{ report?.description | titlecase }}
+        </p>
+        <div class="row">
+          <div class="col-xs-auto col-sm-7 col-md-7 col-lg-7">
+            <p>
+              <mat-icon
+                class="text-muted"
+                matTooltip="Lugar de pérdida"
+                matTooltipPosition="above"
+                >place</mat-icon
+              >
+              <span class="aligned-with-icon"
+                >Reportado en {{ report?.lost_place }}</span
+              >
+            </p>
+            <p>
+              <mat-icon
+                class="text-muted"
+                matTooltip="Recompensa"
+                matTooltipPosition="above"
+                >attach_money</mat-icon
+              >
+              <span class="aligned-with-icon">{{
+                !report?.reward
+                  ? "Sin recompensa"
+                  : (report?.reward | formatCurrency)
+              }}</span>
+            </p>
+          </div>
+          <div class="col-xs-auto col-sm-5 col-md-5 col-lg-5">
+            <p>
+              <mat-icon
+                class="text-muted"
+                matTooltip="Fecha pérdida"
+                matTooltipPosition="above"
+                >date_range</mat-icon
+              >
+              <span class="aligned-with-icon"
+                >Reportado desde
+                {{ report?.lost_date | date: "MMM d, y" }}</span
+              >
+            </p>
+            <p>
+              <mat-icon
+                class="text-muted"
+                matTooltip="Categoría"
+                matTooltipPosition="above"
+                >bookmark</mat-icon
+              >
+              <span class="aligned-with-icon">{{
+                report?.category.category
+              }}</span>
+            </p>
+          </div>
+        </div>
+        <mat-divider style="width: 90%; margin-left: 5%"></mat-divider>
+        <h3 class="fw-bold mt-2">Evidencias</h3>
+        <div class="row text-center mt-2 mb-3">
+          <div
+            class="col-xs-12 col-sm-12 col-md-4 col-lg-4"
+            *ngFor="let photo of report?.images; let i = index"
+          >
+            <img
+              src="{{ photo.photo.url }}"
+              class="rounded img-fluid mt-1"
+              alt="Evidences"
+            />
+            <div class="delete-img" *ngIf="editBtn">
+              <mat-icon
+                (click)="deleteImage(photo.photo)"
+                matTooltip="Eliminar evidencia"
+                >clear</mat-icon
+              >
+            </div>
+          </div>
+
+          <p *ngIf="report?.images.length === 0 && editBtn" class="text-danger">
+            <span class="fw-bold text-muted">No hay evidencias.</span> Es
+            necesario que se agreguen evidencias (imágenes en formato PNG, JPG,
+            JPEG, GIF) al elemento para que esté accesible al público; de lo
+            contrario solo podrá ser visualizada por usted. <br />
+          </p>
+          <p class="text-center mt-3" *ngIf="editBtn">
+            <button mat-raised-button color="accent" (click)="addEvidence(report)">
+              <mat-icon>description</mat-icon> Agregar evidencia
+            </button>
+          </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <app-empty *ngIf="reports.length === 0"></app-empty>
+
+  <app-up-to-date *ngIf="reports.length > 0"></app-up-to-date>
+</block-ui>

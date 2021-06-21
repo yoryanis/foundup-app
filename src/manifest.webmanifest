@@ -1,0 +1,59 @@
+{
+  "name": "FoundUp App",
+  "short_name": "FoundUp App",
+  "theme_color": "#1976d2",
+  "background_color": "#3E51FF",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
+  "icons": [
+    {
+      "src": "assets/icons/logo-72.png",
+      "sizes": "72x15",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/logo-96.png",
+      "sizes": "96x19",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/logo-128.png",
+      "sizes": "128x26",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/logo-144.png",
+      "sizes": "144x29",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/logo-152.png",
+      "sizes": "152x31",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/logo-192.png",
+      "sizes": "192x39",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/logo-384.png",
+      "sizes": "384x78",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/logo-512.png",
+      "sizes": "512x104",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ]
+}

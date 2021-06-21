@@ -1,0 +1,28 @@
+<app-navbar *ngIf="isLoggedIn; else loggedout"></app-navbar>
+<ng-template #loggedout>
+  <app-navbar-logged-out></app-navbar-logged-out>
+</ng-template>
+
+<div class="container">
+  <div class="row">
+    <p class="text-center mt-5">
+      <img src="../../../assets/icons/logo.png" alt="Not Found" />
+    </p>
+    <h1 class="text-muted text-center mt-3">Página no encontrada!</h1>
+
+    <p class="text-center" *ngIf="isLoggedIn; else loggedoutPage">
+      <button mat-raised-button color="primary" (click)="goToHome()">
+        Regresar al Inicio
+      </button>
+    </p>
+    <ng-template #loggedoutPage>
+      <p class="text-center">
+        <button mat-raised-button color="primary" (click)="goToLogin()">
+          Iniciar sesión
+        </button>
+      </p>
+    </ng-template>
+  </div>
+</div>
+
+<app-navbar-main *ngIf="isLoggedIn"></app-navbar-main>
